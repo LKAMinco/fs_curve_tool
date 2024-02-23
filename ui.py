@@ -39,7 +39,8 @@ class GCT_PT_ArrayExportPanel(Panel):
         gct_props = context.scene.giants_curve_tool
         layout = self.layout
 
-        pass
+        row = layout.row()
+        row.prop(gct_props, "export_type")
 
 
 class GCT_PT_EmptyPanel(Panel):

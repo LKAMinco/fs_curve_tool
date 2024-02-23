@@ -86,27 +86,15 @@ class GCT_OT_ImportCurve(Operator):
         if self.reset_curve_counter:
             self.counter.curve_counter = 0
 
-        # TODO  create function for empty stuff
-        empty_root = bpy.data.objects.new('curveArray' + str(self.counter.array_counter), None)
-        bpy.context.collection.objects.link(empty_root)
-        empty_root.empty_display_type = 'ARROWS'
-        empty_root.empty_display_size = 0.25
+        empty_root = self.setup_empty('curveArray' + str(self.counter.array_counter))
 
         for key, value in dds_file.objects.items():
-            empty_pose = bpy.data.objects.new('pose' + str(self.counter.pose_counter), None)
-            bpy.context.collection.objects.link(empty_pose)
-            empty_pose.parent = empty_root
-            empty_pose.empty_display_type = 'ARROWS'
-            empty_pose.empty_display_size = 0.25
-
+            empty_pose = self.setup_empty('pose' + str(self.counter.pose_counter), empty_root)
+            empty_parent = None
             for idx, (pos, rot, scale) in enumerate(zip(value['location'], value['rotation'], value['scale'])):
                 print(f'pos {pos}, rot {rot}, scale {scale}')
                 if idx % max_obj_count == 0:
-                    empty_parent = bpy.data.objects.new('parent' + str(self.counter.parent_counter), None)
-                    bpy.context.collection.objects.link(empty_parent)
-                    empty_parent.parent = empty_pose
-                    empty_parent.empty_display_type = 'ARROWS'
-                    empty_parent.empty_display_size = 0.25
+                    empty_parent = self.setup_empty('parent' + str(self.counter.parent_counter), empty_pose)
                 if hide_first_and_last:
                     if pos[3] == 0.0 and idx % max_obj_count != 0 and idx % max_obj_count != max_obj_count - 1:
                         continue
@@ -114,17 +102,21 @@ class GCT_OT_ImportCurve(Operator):
                     if pos[3] == 0.0:
                         continue
 
-                empty_curve = bpy.data.objects.new('curve' + str(self.counter.curve_counter), None)
-                bpy.context.collection.objects.link(empty_curve)
-                empty_curve.parent = empty_parent
-                # print(f'empty_curve: {empty_curve.name} parenting to {empty_parent.name}')
-                empty_curve.empty_display_type = 'ARROWS'
-                empty_curve.empty_display_size = 0.25
+                empty_curve = self.setup_empty('curve' + str(self.counter.curve_counter), empty_parent)
                 empty_curve.location = pos[0], -1 * pos[2], pos[1]
                 empty_curve.rotation_euler = to_euler(rot)
                 empty_curve.scale = scale[:3]
 
         return {'FINISHED'}
+
+    @staticmethod
+    def setup_empty(name, parent=None):
+        empty = bpy.data.objects.new(name, None)
+        bpy.context.collection.objects.link(empty)
+        empty.parent = parent
+        empty.empty_display_type = 'ARROWS'
+        empty.empty_display_size = 0.25
+        return empty
 
 
 class GCT_OT_BuildCurveSelected(Operator):

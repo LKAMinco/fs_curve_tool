@@ -28,6 +28,17 @@ class GCT_Properties(PropertyGroup):
         default=True
     )
 
+    export_type: EnumProperty(
+        name="Export",
+        description="Select which part of the scene to export",
+        default='ACTIVE',
+        items={
+            ('ACTIVE', "Active Object", "Export only the active object", 0),
+            ('ACTIVE_COLLECTION', "Active Collection", "Export only the active collection", 1),
+            ('Everything', "Everything", "Export all the objects in the scene", 2),
+            ('SELECTED', "Selected Objects", "Export only the selected objects", 3),
+        })
+
 
 class GCT_EmptyProperties(PropertyGroup):
     export_position: BoolProperty(
