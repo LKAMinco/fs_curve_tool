@@ -65,7 +65,7 @@ class GCT_OT_ImportCurve(Operator):
     counter = Counter()
 
     def execute(self, context):
-        gtc_props = context.scene.giants_curve_tool
+        gtc_props = context.scene.giants_array_tool
         path = abspath(gtc_props.path)
         with open(path, 'rb') as file:
             data = file.read()
@@ -86,13 +86,16 @@ class GCT_OT_ImportCurve(Operator):
         if self.reset_curve_counter:
             self.counter.curve_counter = 0
 
-        empty_root = self.setup_empty('curveArray' + str(self.counter.array_counter))
+        name = 'curveArray' + str(self.counter.array_counter)
+        empty_root = self.setup_empty(name)
+        empty_root.giants_array_tool.root = True
+        empty_root.giants_array_tool.array_name = name
 
         for key, value in dds_file.objects.items():
             empty_pose = self.setup_empty('pose' + str(self.counter.pose_counter), empty_root)
             empty_parent = None
             for idx, (pos, rot, scale) in enumerate(zip(value['location'], value['rotation'], value['scale'])):
-                print(f'pos {pos}, rot {rot}, scale {scale}')
+                # print(f'pos {pos}, rot {rot}, scale {scale}')
                 if idx % max_obj_count == 0:
                     empty_parent = self.setup_empty('parent' + str(self.counter.parent_counter), empty_pose)
                 if hide_first_and_last:

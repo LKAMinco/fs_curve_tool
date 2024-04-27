@@ -27,12 +27,12 @@ classes = (
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.giants_curve_tool = bpy.props.PointerProperty(type=GCT_Properties)
-    bpy.types.Object.giants_empty_tool = bpy.props.PointerProperty(type=GCT_EmptyProperties)
+    bpy.types.Scene.giants_array_tool = bpy.props.PointerProperty(type=GCT_Properties)
+    bpy.types.Object.giants_array_tool = bpy.props.PointerProperty(type=GCT_EmptyProperties)
 
 
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.giants_curve_tool
-    del bpy.types.Object.giants_empty_tool
+    del bpy.types.Scene.giants_array_tool
+    del bpy.types.Object.giants_array_tool

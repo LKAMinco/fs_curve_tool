@@ -12,7 +12,7 @@ class GCT_PT_ArrayImportPanel(Panel):
     bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
-        gct_props = context.scene.giants_curve_tool
+        gct_props = context.scene.giants_array_tool
         layout = self.layout
 
         row = layout.row()
@@ -36,7 +36,7 @@ class GCT_PT_ArrayExportPanel(Panel):
     bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
-        gct_props = context.scene.giants_curve_tool
+        gct_props = context.scene.giants_array_tool
         layout = self.layout
 
         row = layout.row()
@@ -56,7 +56,7 @@ class GCT_PT_EmptyPanel(Panel):
         return context.object is not None and context.object.type == 'EMPTY'
 
     def draw(self, context):
-        gct_props = context.object.giants_empty_tool
+        gct_props = context.object.giants_array_tool
         layout = self.layout
 
         row = layout.row()
